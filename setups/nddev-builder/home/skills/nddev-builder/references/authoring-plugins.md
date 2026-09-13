@@ -34,9 +34,9 @@ Generated from the same rows as the section above, for every harness in this est
 
 | field | `claude` | `grok` | `cursor` | `antigravity` |
 |---|---|---|---|---|
-| `name` | **required** | yes | **required** | yes |
+| `name` | **required** | yes | **required** | **required** |
 | `displayName` | yes | — | — | — |
-| `description` | yes | yes | yes | — |
+| `description` | yes | yes | yes | yes |
 | `version` | yes | — | yes | — |
 | `author` | yes | — | yes | — |
 | `skills` | yes | yes | yes | — |
@@ -58,7 +58,7 @@ Generated from the same rows as the section above, for every harness in this est
 | `rules` | — | — | yes | — |
 | `variables` | — | — | yes | — |
 
-**The part that travels**: `name`. Everything else is a bet on one product.
+**The part that travels**: `name`, `description`. Everything else is a bet on one product.
 
 **The part that does not, and says nothing when it does not**: a field absent from a column is not rejected there -- it is read past. Nothing warns, no run fails, and the component behaves differently with the same bytes. Where the field was carrying a restriction, the restriction is simply gone. Check the column before relying on one.
 
