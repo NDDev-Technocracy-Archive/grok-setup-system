@@ -961,6 +961,81 @@
             "source": "https://docs.x.ai/build/features/skills-plugins-marketplaces; measured by running grok 1.0.18 inspect --json against a temporary HOME, 2026-09-04"
           }
         ]
+      },
+      {
+        "target_scope": "project",
+        "root": "explicit checkout root",
+        "measured_at": "2026-10-26",
+        "surfaces": [
+          {
+            "path": "AGENTS.md",
+            "kinds": [
+              "instruction"
+            ],
+            "shape": "file",
+            "source": "https://docs.x.ai/build/features/project-rules",
+            "evidence": "page"
+          },
+          {
+            "path": ".grok/skills",
+            "kinds": [
+              "skill"
+            ],
+            "shape": "directory",
+            "source": "https://docs.x.ai/build/features/skills-plugins-marketplaces",
+            "evidence": "page"
+          },
+          {
+            "path": ".grok/agents",
+            "kinds": [
+              "agent"
+            ],
+            "shape": "directory",
+            "source": "https://docs.x.ai/build/features/subagents",
+            "evidence": "page"
+          },
+          {
+            "path": ".grok/plugins",
+            "kinds": [
+              "plugin"
+            ],
+            "shape": "directory",
+            "source": "https://docs.x.ai/build/features/skills-plugins-marketplaces",
+            "evidence": "page"
+          },
+          {
+            "path": ".grok/hooks",
+            "kinds": [
+              "hook"
+            ],
+            "shape": "directory",
+            "source": "https://docs.x.ai/build/features/hooks",
+            "evidence": "page"
+          }
+        ],
+        "declined": [
+          {
+            "path": ".grok",
+            "reason": "The whole directory includes runtime, trust, credentials and managed policy. Only explicitly named resource children are owned.",
+            "source": "https://docs.x.ai/build/settings"
+          },
+          {
+            "path": ".grok/config.toml",
+            "reason": "Project configs accept only MCP, plugins and permission rules. Generic user settings are not a qualified project route; content validation and MCP need separate qualification.",
+            "source": "https://docs.x.ai/build/settings"
+          },
+          {
+            "path": ".grok/plugins/known_marketplaces.json",
+            "reason": "The product-owned marketplace registry is explicitly never touched at project scope too.",
+            "source": "https://docs.x.ai/build/features/skills-plugins-marketplaces"
+          },
+          {
+            "path": ".agents",
+            "reason": "Shared resources have separate ownership and are not claimed by this vendor-specific project profile.",
+            "source": "https://docs.x.ai/build/features/skills-plugins-marketplaces"
+          }
+        ],
+        "loading_note": "Project hooks require a separate Grok trust decision. Installation never grants hooks trust, touches trusted_folders.toml or launches the vendor. Compatibility roots and managed policy can contribute independently; this profile is not an isolated process home."
       }
     ],
     "projection_basis": {
@@ -1023,7 +1098,8 @@
     "requirements.toml",
     "managed_config.sig.json",
     "managed_identity.sig.json",
-    "managed_config_cache.json"
+    "managed_config_cache.json",
+    ".grok/plugins/known_marketplaces.json"
   ],
   "setup_catalogue_digest": "sha256:a9cbae31880576266e3830ca16573c9101219f8edeed451124c51d49ba681390",
   "previous_software_artifacts": {

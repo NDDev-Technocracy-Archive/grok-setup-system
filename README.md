@@ -8,10 +8,15 @@ orchestration; this component owns the final harness files and recovery.
 This repository remains the public source and release boundary, with the
 existing package identity. It is part of ai-stp, not a separate user workflow.
 
-The isolated [Rust CLI preview](https://github.com/ai-engineers-guild/ai-stp/tree/dev/apps/cli-v2)
-reports its implemented capabilities through its executable registry. Native
-writable lifecycle and production cutover are separate acceptance steps;
-this component's commands below do not claim that the preview already installs.
+The native [ai-stp CLI](https://github.com/ai-engineers-guild/ai-stp/tree/main/apps/cli)
+reports its implemented capabilities through its executable registry. A setup
+requires both an authenticated component profile and a qualified consumer route.
+
+Project bundles target the explicit checkout and own only AGENTS.md and the
+named .grok resource directories. Credentials, runtime state, trust decisions,
+managed policy and the product-owned marketplace registry remain protected.
+Project hooks still require Grok's own trust. Project config accepts a subset of
+user settings and remains outside this profile pending content qualification.
 
 Installs, reselects, restores and removes a complete Grok Build harness configuration, and owns the program lifecycle.
 
@@ -183,9 +188,9 @@ download say the same thing.
 
 The ai-stp CLI selects an exact component release, authenticates its artifacts
 and invokes it through the provider protocol. Normal user workflows do not
-require installing this component as a second CLI. The native preview's
-implemented commands are described in its linked contract above; its writable
-lifecycle remains a separate acceptance step.
+require installing this component as a second CLI. The native CLI's executable
+registry describes implemented commands. Scope-specific installation requires
+both a qualified component profile and a qualified consumer route.
 
 For maintenance, a locally built executable can be checked explicitly through
 the released CLI's expert conformance command:

@@ -282,11 +282,17 @@ fn check_within_surface<'a>(
             Surface::AnyDeclared => harness.owns_anywhere(path),
             Surface::At(scope) => harness.owns_at(path, scope),
         };
-        if !owned {
+        let protected = harness.never_touch.iter().any(|root| {
+            path == *root
+                || path
+                    .strip_prefix(*root)
+                    .is_some_and(|tail| tail.starts_with('/'))
+        });
+        if !owned || protected {
             return Err(Error::refuse(
                 WireReason::UnsupportedNativeSurface,
                 format!(
-                    "the bundle writes {path:?}, which is outside the surface {} owns",
+                    "the bundle writes {path:?}, which is outside the permitted surface of {}",
                     harness.provider_id
                 ),
             ));
