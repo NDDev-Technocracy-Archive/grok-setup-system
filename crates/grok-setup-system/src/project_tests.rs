@@ -410,5 +410,7 @@ fn project_plan_refuses_unowned_paths_before_writes() {
             "{path}: {refusal}"
         );
         fixture.check_preserved();
+        assert!(!fixture.target.join(GROK.control_directory).exists());
+        assert!(!fixture.target.join(GROK.state_file).exists());
     }
 }
