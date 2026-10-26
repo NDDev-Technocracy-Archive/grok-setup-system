@@ -13,7 +13,7 @@ This repository ships `scripts/evidence.py` beside the Cargo workspace. Other
 paths an older entry names may describe checks that ran when that release was
 cut and that this clone does not carry.
 
-## [Unreleased]
+## [0.0.95] - 2026-10-26
 
 Project resources have a separate native-files profile at the explicit checkout.
 The five declared component kinds have prepared application, source-loss replay,
