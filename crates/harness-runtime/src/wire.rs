@@ -283,9 +283,9 @@ fn check_within_surface<'a>(
             Surface::At(scope) => harness.owns_at(path, scope),
         };
         let protected = harness.never_touch.iter().any(|root| {
-            path == root
+            path == *root
                 || path
-                    .strip_prefix(root)
+                    .strip_prefix(*root)
                     .is_some_and(|tail| tail.starts_with('/'))
         });
         if !owned || protected {
