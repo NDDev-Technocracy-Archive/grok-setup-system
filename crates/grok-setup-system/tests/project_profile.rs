@@ -50,7 +50,7 @@ fn public_project_profile_routes_supported_kinds_without_claiming_runtime_or_cre
         ("instruction", "AGENTS.md"),
         ("skill", ".grok/skills/review/SKILL.md"),
         ("agent", ".grok/agents/review.md"),
-        ("plugin", ".grok/plugins/review/.grok-plugin/plugin.json"),
+        ("plugin", ".grok/plugins/review/plugin.json"),
         ("hook", ".grok/hooks/review.json"),
     ] {
         assert!(kinds.iter().any(|value| value == kind), "{kind} is absent");

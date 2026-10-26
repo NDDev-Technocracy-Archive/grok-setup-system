@@ -15,6 +15,18 @@ cut and that this clone does not carry.
 
 ## [Unreleased]
 
+Project resources have a separate native-files profile at the explicit checkout.
+The five declared component kinds have prepared application, source-loss replay,
+recovery, replacement and removal coverage on disposable targets. Credentials,
+trust, runtime, managed policy, foreign resources and the product-owned project
+marketplace registry remain protected. Unsupported paths refuse before writes.
+Project config/MCP remain undeclared pending content-specific qualification.
+
+Standalone crates.io packaging retains all component modules, resolves nested
+crate paths at single-colon boundaries and uses Cargo's configured target path.
+CI checks the projected package, compiles its tests and reads the executable's
+provider declaration. Published releases remain unchanged.
+
 ## [0.0.94] - 2026-10-13
 
 Forward configuration plans now support explicit preparation before any

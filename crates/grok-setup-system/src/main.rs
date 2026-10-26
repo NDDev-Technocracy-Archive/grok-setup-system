@@ -13,6 +13,9 @@ use std::process::ExitCode;
 
 mod software;
 
+#[cfg(test)]
+mod project_tests;
+
 use harness_runtime::{Harness, LaunchBinding, PreservationSurface, Scoped, Shadow};
 use provider_v3::{ComponentKind, ProjectionKind, TargetScope};
 
@@ -209,6 +212,8 @@ pub const GROK: Harness = Harness {
         // identity. `plugins` still routes the plugin kind, so it cannot be
         // dropped the way cursor's redundant parent was.
         "plugins/known_marketplaces.json",
+        // The same product-owned registry must remain outside project writes.
+        ".grok/plugins/known_marketplaces.json",
         // A person's installed plugins and the registry that records them.
         // `grok plugin install <dir> --trust` writes both, measured at 1.0.13
         // on 2026-08-31, and writes no `plugins/` at all -- the two are one
@@ -289,7 +294,7 @@ pub const GROK: Harness = Harness {
         ProjectionKind::Marketplace,
         ProjectionKind::Plugin,
     ],
-    // **Two scopes.** The second is `~/.agents`, the one root in this estate
+    // User-root is `~/.agents`, the one root in this estate
     // that belongs to a convention rather than to a product: a *sibling* of
     // this product's configuration home, not a child, so nothing declared
     // against the target above can reach it. That is what `user_root` is for.
@@ -307,22 +312,45 @@ pub const GROK: Harness = Harness {
     // this root. This sentence used to say one declared it; all five do now --
     // the reason had simply not been re-read when the thing it described
     // changed, and the sentence kept its old answer.
-    scoped_projections: &[Scoped {
-        target_scope: TargetScope::UserRoot,
-        // Distinct from the global identity, because the digest binds a
-        // declaration together with the scope it owns.
-        profile_id: "grok/native-files/user-root/1",
-        component_kinds: &[ComponentKind::Skill],
-        projection_kinds: &[ProjectionKind::NativeFiles],
-        // Relative to `~/.agents`, which is the target this scope names -- so a
-        // skill is `skills/<name>` rather than `.agents/skills/<name>`. Writing
-        // the root into the path would put the skills at
-        // `~/.agents/.agents/skills`.
-        native_namespaces: &["skills"],
-        // `~/.agents/commands/*.md` is discovered as a skill (grok 1.0.18
-        // `inspect --json`) and is declined in the baseline so this kind is
-        // not declared on two surfaces.
-    }],
+    scoped_projections: &[
+        Scoped {
+            target_scope: TargetScope::UserRoot,
+            // Distinct from the global identity, because the digest binds a
+            // declaration together with the scope it owns.
+            profile_id: "grok/native-files/user-root/1",
+            component_kinds: &[ComponentKind::Skill],
+            projection_kinds: &[ProjectionKind::NativeFiles],
+            // Relative to `~/.agents`, which is the target this scope names -- so a
+            // skill is `skills/<name>` rather than `.agents/skills/<name>`. Writing
+            // the root into the path would put the skills at
+            // `~/.agents/.agents/skills`.
+            native_namespaces: &["skills"],
+            // `~/.agents/commands/*.md` is discovered as a skill (grok 1.0.18
+            // `inspect --json`) and is declined in the baseline so this kind is
+            // not declared on two surfaces.
+        },
+        Scoped {
+            target_scope: TargetScope::Project,
+            profile_id: "grok/native-files/project/1",
+            component_kinds: &[
+                ComponentKind::Instruction,
+                ComponentKind::Skill,
+                ComponentKind::Agent,
+                ComponentKind::Hook,
+                ComponentKind::Plugin,
+            ],
+            projection_kinds: &[ProjectionKind::NativeFiles],
+            // Project config has narrower semantics than user config. It is
+            // not routed until those content restrictions are qualified.
+            native_namespaces: &[
+                "AGENTS.md",
+                ".grok/skills",
+                ".grok/agents",
+                ".grok/hooks",
+                ".grok/plugins",
+            ],
+        },
+    ],
     max_files: 8192,
     max_bytes: 64 * 1024 * 1024,
     kit_identity: include_str!("../../../provider-kit/v3/KIT-IDENTITY.json"),
