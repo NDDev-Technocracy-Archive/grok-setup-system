@@ -27,6 +27,8 @@ _check:
     cargo deny --frozen --all-features check bans licenses advisories sources
     cargo audit --no-fetch
     cargo-machete
+    shfmt -d -i 2 tools/check_binary_boundary.sh
+    shellcheck tools/check_binary_boundary.sh
     actionlint
     zizmor --offline --no-progress .github
     gitleaks git --no-banner --redact --log-opts=--all .
@@ -35,6 +37,7 @@ _check:
 fix:
     cargo fmt --all
     just --fmt
+    shfmt -w -i 2 tools/check_binary_boundary.sh
 
 # Emits the source-owned compiler and supported minimum for CI.
 ci-inputs:

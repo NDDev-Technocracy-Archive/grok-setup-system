@@ -3,19 +3,28 @@ set -euo pipefail
 root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$root"
 case "$(uname -s)" in
-  Linux) boundary_os=Linux ;;
-  Darwin) boundary_os=macOS ;;
-  *) echo 'The native import-table boundary has Linux/macOS readers only.' >&2; exit 1 ;;
+Linux) boundary_os=Linux ;;
+Darwin) boundary_os=macOS ;;
+*)
+  echo 'The native import-table boundary has Linux/macOS readers only.' >&2
+  exit 1
+  ;;
 esac
 bin="$(python3 tools/ci_inputs.py --binary)"
 # Whole symbols and the reader's measured floor are required for both original checks.
 case "$boundary_os" in
-  Linux) undefined() { nm -D --undefined-only "$1" | awk '{print $NF}' | sed 's/@.*//' | sort -u; } ;;
-  macOS) undefined() { nm -u "$1" | sed 's/^_//' | sort -u; } ;;
-  *) echo "no reader for $boundary_os" >&2; exit 1 ;;
+Linux) undefined() { nm -D --undefined-only "$1" | awk '{print $NF}' | sed 's/@.*//' | sort -u; } ;;
+macOS) undefined() { nm -u "$1" | sed 's/^_//' | sort -u; } ;;
+*)
+  echo "no reader for $boundary_os" >&2
+  exit 1
+  ;;
 esac
 
-test -f "$bin" || { echo "no binary at $bin" >&2; exit 1; }
+test -f "$bin" || {
+  echo "no binary at $bin" >&2
+  exit 1
+}
 count=$(undefined "$bin" | grep -c . || true)
 if [ "$count" -lt 10 ]; then
   echo "read only $count undefined symbols from $bin; the reader is not working" >&2
@@ -33,7 +42,10 @@ if [ -n "$net" ]; then
 fi
 echo "no network symbol is imported"
 
-test -f "$bin" || { echo "no binary at $bin" >&2; exit 1; }
+test -f "$bin" || {
+  echo "no binary at $bin" >&2
+  exit 1
+}
 count=$(undefined "$bin" | grep -c . || true)
 if [ "$count" -lt 10 ]; then
   echo "read only $count undefined symbols from $bin; the reader is not working" >&2
